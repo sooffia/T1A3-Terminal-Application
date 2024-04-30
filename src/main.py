@@ -1,92 +1,151 @@
 from title import main_logo
 from simple_term_menu import TerminalMenu
 from clear import clear 
-import json 
+import csv 
+import datetime as dt
 
 print(main_logo)
 
 def main_greeting():
-    print("Welcome to Your Personal Class Schedule Manager")
+    print("Welcome to Your Class Schedule Manager")
 
 def navigate_to_menu():
     input("Press Enter to return to the main menu. \n")
-    clear()
-    print(main_logo)
-    main_greeting()
-    main()
+    main_menu()
 
-def class_logger(): 
+def add_class_schedule():
     clear()
     class_name = input("Enter Class Name: ")
-    group_section = input("Enter Group/Section: ")
-    year = int(input("Enter Year (YYYY): "))
+    day = input("Enter Day (e.g., Monday): ")
+    start_time = input("Enter Start Time (HH:MM): ")
+    end_time = input("Enter End Time (HH:MM): ")
+    room = input("Enter Room Number: ")
 
-    num_days = int(input("Enter Number of days per week: "))
-    schedule_entries = []
-    for i in range(num_days):
-        day = input(f"Enter Day {i+1} (e.g., Monday): ")
-        start_time = input(f"Enter Start Time {i+1} (HH:MM): ")
-        end_time = input(f"Enter End Time {i+1} (HH:MM): ")
-        class_room = input(f"Enter Class Room {i+1}: ")
-        teacher_name = input(f"Enter Teacher's Name {i+1}: ")
-        schedule_entries.append({"day": day, "start_time": start_time, "end_time": end_time, "class_room": class_room, "teacher_name": teacher_name})
+    with open('schedule.csv', 'a', newline='') as file:
+        writer = csv.writer(file)
+        writer.writerow([class_name, day, start_time, end_time, room])
 
-    print("Class schedule logged successfully.")
-    file_class = "schedule.json"
-    with open(file_class, "w") as file:
-        json.dump(schedule_entries, file, indent=4)
+    print("Class added successfully.")
     navigate_to_menu()
 
-def update_classes():
-    file_class = "schedule.json"
-    try:
-        with open(file_class, "r") as file:
-            schedule_entries = json.load(file)
-    except FileNotFoundError:
-        print("No class schedule found. Please log classes first.")
+def update_class_schedule():
+    clear()
+    print("Update Class Schedule:")
+    # Load existing schedule from CSV
+    schedule = []
+    with open('schedule.csv', 'r') as file:
+        reader = csv.reader(file)
+        schedule = list(reader)
+
+    if not schedule:
+        print("No classes found.")
         navigate_to_menu()
-        return
 
     print("Current Class Schedule:")
-    for i, entry in enumerate(schedule_entries, start=1):
-        print(f"{i}. {entry['day']} - {entry['start_time']} to {entry['end_time']} in {entry['class_room']} with {entry['teacher_name']}")
+    for i, row in enumerate(schedule, start=1):
+        print(f"{i}. {row[0]} - {row[1]} - {row[2]} to {row[3]} - Room {row[4]}")
 
-    update_index = int(input("Enter the number of the class to update: ")) - 1
-    if 0 <= update_index < len(schedule_entries):
-        entry = schedule_entries[update_index]
-        print("Update Class Schedule:")
-        entry["day"] = input(f"Enter Day ({entry['day']}): ") or entry["day"]
-        entry["start_time"] = input(f"Enter Start Time ({entry['start_time']}): ") or entry["start_time"]
-        entry["end_time"] = input(f"Enter End Time ({entry['end_time']}): ") or entry["end_time"]
-        entry["class_room"] = input(f"Enter Class Room ({entry['class_room']}): ") or entry["class_room"]
-        entry["teacher_name"] = input(f"Enter Teacher's Name ({entry['teacher_name']}): ") or entry["teacher_name"]
+    try:
+        choice = int(input("Enter the number of the class to update: ")) - 1
+        if 0 <= choice < len(schedule):
+            class_name = input(f"Enter Class Name ({schedule[choice][0]}): ") or schedule[choice][0]
+            day = input(f"Enter Day ({schedule[choice][1]}): ") or schedule[choice][1]
+            start_time = input(f"Enter Start Time ({schedule[choice][2]}): ") or schedule[choice][2]
+            end_time = input(f"Enter End Time ({schedule[choice][3]}): ") or schedule[choice][3]
+            room = input(f"Enter Room Number ({schedule[choice][4]}): ") or schedule[choice][4]
 
-        with open(file_class, "w") as file:
-            json.dump(schedule_entries, file, indent=4)
-        print("Class schedule updated successfully.")
-    else:
-        print("Invalid class number. Update cancelled.")
+            schedule[choice] = [class_name, day, start_time, end_time, room]
+
+            with open('schedule.csv', 'w', newline='') as file:
+                writer = csv.writer(file)
+                writer.writerows(schedule)
+
+            print("Class schedule updated successfully.")
+        else:
+            print("Invalid selection.")
+    except ValueError:
+        print("Invalid input. Please enter a valid number.")
 
     navigate_to_menu()
 
+def delete_class_schedule():
+    clear()
+    print("Delete Class Schedule:")
+    # Load existing schedule from CSV
+    schedule = []
+    with open('schedule.csv', 'r') as file:
+        reader = csv.reader(file)
+        schedule = list(reader)
 
-def main():
-    options = ["Enter Classes",
-               "Update Classes",
-               "Delete Classes",
-               "View Timetable \n"]
-    terminal_menu = TerminalMenu(options)
-    menu_entry_index = terminal_menu.show() 
-    if menu_entry_index == 0: 
-        clear()
-        main_greeting()
-        class_logger()  
-    elif menu_entry_index == 1:
-        clear()
-        main_greeting()
-        update_classes()
+    if not schedule:
+        print("No classes found.")
         navigate_to_menu()
-    elif menu_entry_index is not None:
-        print(f"You have selected {options[menu_entry_index]}!")
 
-main()
+    print("Current Class Schedule:")
+    for i, row in enumerate(schedule, start=1):
+        print(f"{i}. {row[0]} - {row[1]} - {row[2]} to {row[3]} - Room {row[4]}")
+
+    try:
+        choice = int(input("Enter the number of the class to delete: ")) - 1
+        if 0 <= choice < len(schedule):
+            del schedule[choice]
+
+            with open('schedule.csv', 'w', newline='') as file:
+                writer = csv.writer(file)
+                writer.writerows(schedule)
+
+            print("Class schedule deleted successfully.")
+        else:
+            print("Invalid selection.")
+    except ValueError:
+        print("Invalid input. Please enter a valid number.")
+
+    navigate_to_menu()
+
+def view_class_schedule():
+    clear()
+    print("View Class Schedule:")
+    # Load existing schedule from CSV
+    with open('schedule.csv', 'r') as file:
+        reader = csv.reader(file)
+        schedule = list(reader)
+
+    if not schedule:
+        print("No classes found.")
+    else:
+        print("Current Class Schedule:")
+        for i, row in enumerate(schedule, start=1):
+            print(f"{i}. {row[0]} - {row[1]} - {row[2]} to {row[3]} - Room {row[4]}")
+
+    navigate_to_menu()
+
+def main_menu():
+    options = [
+        "Add Class",
+        "Update Class",
+        "Delete Class",
+        "View Class Schedule",
+        "Exit"
+    ]
+    terminal_menu = TerminalMenu(options)
+    menu_entry_index = terminal_menu.show()
+
+    if menu_entry_index == 0:
+        add_class_schedule()
+    elif menu_entry_index == 1:
+        update_class_schedule()
+    elif menu_entry_index == 2:
+        delete_class_schedule()
+    elif menu_entry_index == 3:
+        view_class_schedule()
+    elif menu_entry_index == 4:
+        exit_program()
+
+def exit_program():
+    print("Thank you for using Your Class Schedule Manager!")
+    exit()
+
+if __name__ == "__main__":
+    main_greeting()
+    while True:
+        main_menu()
