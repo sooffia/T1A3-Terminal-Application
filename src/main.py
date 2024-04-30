@@ -1,7 +1,7 @@
-### MAIN SECTION ###    
 from title import main_logo
 from simple_term_menu import TerminalMenu
 from clear import clear 
+import json 
 
 print(main_logo)
 
@@ -9,17 +9,11 @@ def main_greeting():
     print("Welcome to Your Personal Class Schedule Manager")
 
 def navigate_to_menu():
-    while True:
-        try:
-            navigate = input("To return to the main menu, press '#':  ").lower()
-            if navigate == '#':
-                clear()
-                print("Returning to the main menu...")
-                return
-            else:
-                raise ValueError("\nError! Please type '#'.\n")
-        except ValueError as InvalidInput:
-            print(InvalidInput)
+    input("Press Enter to return to the main menu. \n")
+    clear()
+    print(main_logo)
+    main_greeting()
+    main()
 
 def class_logger(): 
     clear()
@@ -38,25 +32,20 @@ def class_logger():
         schedule_entries.append({"day": day, "start_time": start_time, "end_time": end_time, "class_room": class_room, "teacher_name": teacher_name})
 
     print("Class schedule logged successfully.")
-    print(schedule_entries)
-
-navigate_to_menu()
+    print(json.dumps(schedule_entries, indent=4))
+    navigate_to_menu()
 
 def main():
     options = ["Enter Classes",
                "Update Classes",
                "Delete Classes",
-               "View Timetable"]
+               "View Timetable \n"]
     terminal_menu = TerminalMenu(options)
     menu_entry_index = terminal_menu.show()
     if menu_entry_index == 0: 
         clear()
         main_greeting()
         class_logger()  
-        navigate_to_menu()  # After logging classes, return to the main menu
     elif menu_entry_index is not None:
         print(f"You have selected {options[menu_entry_index]}!")
-    else:
-        print("No option selected.")
-
 main()
