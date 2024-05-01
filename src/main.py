@@ -11,6 +11,7 @@ def main_greeting():
 
 def navigate_to_menu():
     input("Press Enter to return to the main menu. \n")
+    print(main_logo) 
     main_menu()
 
 def add_class_schedule():
