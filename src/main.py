@@ -2,7 +2,8 @@ from title import main_logo
 from simple_term_menu import TerminalMenu
 from clear import clear 
 import csv 
-import datetime as dt
+from datetime import datetime 
+from unique_exceptions import InvalidTimeError
 
 print(main_logo)
 
@@ -10,23 +11,50 @@ def main_greeting():
     print("Welcome to Your Class Schedule Manager")
 
 def navigate_to_menu():
-    input("Press Enter to return to the main menu. \n")
+    input("Press Enter to return to the main menu.\n")
     print(main_logo) 
     main_menu()
 
 def add_class_schedule():
     clear()
-    class_name = input("Enter Class Name: ")
-    day = input("Enter Day (e.g., Monday): ")
-    start_time = input("Enter Start Time (HH:MM): ")
-    end_time = input("Enter End Time (HH:MM): ")
-    room = input("Enter Room Number: ")
+    while True:
+        class_name = input("Enter Class Name: ")
+        day = input("Enter Day (e.g., Monday): ")
+        
+        while True:
+            start_time_str = input("Enter Start Time (HH:MM): ")
+            try:
+                start_time = datetime.strptime(start_time_str, "%H:%M")
+                break  # Exit the loop if the input is valid
+            except ValueError:
+                print("Invalid time format. Please enter time in HH:MM format.")
+        
+        while True:
+            end_time_str = input("Enter End Time (HH:MM): ")
+            try:
+                end_time = datetime.strptime(end_time_str, "%H:%M")
+                if end_time <= start_time:
+                    raise InvalidTimeError  # Raise the InvalidTimeError here
+                else:
+                    break  # Exit the loop if the input is valid
+            except ValueError:
+                print("Invalid time format. Please enter time in HH:MM format.")
+            except InvalidTimeError as e:
+                print(e)  # This will print the error message defined in InvalidTimeError
+        
+        room = input("Enter Room Number: ")
 
-    with open('schedule.csv', 'a', newline='') as file:
-        writer = csv.writer(file)
-        writer.writerow([class_name, day, start_time, end_time, room])
+        # Write to the CSV file
+        with open('schedule.csv', 'a', newline='') as file:
+            writer = csv.writer(file)
+            writer.writerow([class_name, day, start_time, end_time, room])
 
-    print("Class added successfully.")
+        print("Class added successfully.")
+
+        choice = input("Press '#' to add another class, or press Enter to return to the main menu:: ")
+        if choice != '#':
+            break
+
     navigate_to_menu()
 
 def update_class_schedule():
@@ -95,13 +123,30 @@ def delete_class_schedule():
                 writer = csv.writer(file)
                 writer.writerows(schedule)
 
-            print("Class schedule deleted successfully.")
+            print("Class schedule deleted successfully.\n")
         else:
             print("Invalid selection.")
     except ValueError:
         print("Invalid input. Please enter a valid number.")
 
     navigate_to_menu()
+
+# def view_class_schedule():
+#     clear()
+#     print("View Class Schedule:")
+#     # Load existing schedule from CSV
+#     with open('schedule.csv', 'r') as file:
+#         reader = csv.reader(file)
+#         schedule = list(reader)
+
+#     if not schedule:
+#         print("No classes found.")
+#     else:
+#         print("Current Class Schedule:")
+#         for i, row in enumerate(schedule, start=1):
+#             print(f"{i}. {row[0]} - {row[1]} - {row[2]} to {row[3]} - Room {row[4]}")
+
+#     navigate_to_menu()
 
 def view_class_schedule():
     clear()
@@ -115,8 +160,17 @@ def view_class_schedule():
         print("No classes found.")
     else:
         print("Current Class Schedule:")
-        for i, row in enumerate(schedule, start=1):
-            print(f"{i}. {row[0]} - {row[1]} - {row[2]} to {row[3]} - Room {row[4]}")
+        days = {}
+        for row in schedule:
+            if row[1] not in days:
+                days[row[1]] = []
+            days[row[1]].append(f"{row[0]} - {row[2]} to {row[3]} - Room {row[4]}")
+
+        for day in sorted(days.keys()):  # Sort the days for consistency
+            print(f"\n{day}:")
+            classes = days[day]
+            for class_info in classes:
+                print(f"- {class_info}")
 
     navigate_to_menu()
 
