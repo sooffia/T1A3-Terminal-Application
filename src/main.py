@@ -3,7 +3,7 @@ from simple_term_menu import TerminalMenu
 from clear import clear 
 import csv 
 from datetime import datetime 
-from unique_exceptions import InvalidTimeError
+from unique_exceptions import InvalidTimeError, NumberInputError 
 
 print(main_logo)
 
@@ -25,7 +25,7 @@ def add_class_schedule():
             start_time_str = input("Enter Start Time (HH:MM): ")
             try:
                 start_time = datetime.strptime(start_time_str, "%H:%M")
-                break  # Exit the loop if the input is valid
+                break  
             except ValueError:
                 print("Invalid time format. Please enter time in HH:MM format.")
         
@@ -34,13 +34,13 @@ def add_class_schedule():
             try:
                 end_time = datetime.strptime(end_time_str, "%H:%M")
                 if end_time <= start_time:
-                    raise InvalidTimeError  # Raise the InvalidTimeError here
+                    raise InvalidTimeError  
                 else:
-                    break  # Exit the loop if the input is valid
+                    break  
             except ValueError:
                 print("Invalid time format. Please enter time in HH:MM format.")
             except InvalidTimeError as e:
-                print(e)  # This will print the error message defined in InvalidTimeError
+                print(e)  
         
         room = input("Enter Room Number: ")
 
@@ -81,7 +81,15 @@ def update_class_schedule():
             day = input(f"Enter Day ({schedule[choice][1]}): ") or schedule[choice][1]
             start_time = input(f"Enter Start Time ({schedule[choice][2]}): ") or schedule[choice][2]
             end_time = input(f"Enter End Time ({schedule[choice][3]}): ") or schedule[choice][3]
-            room = input(f"Enter Room Number ({schedule[choice][4]}): ") or schedule[choice][4]
+
+            # Validate room number input
+            while True:
+                room_input = input(f"Enter Room Number ({schedule[choice][4]}): ") or schedule[choice][4]
+                try:
+                    room = int(room_input)
+                    break  # Exit the loop if the input is a valid number
+                except ValueError:
+                    print("Invalid room number. Please enter a valid number.")
 
             schedule[choice] = [class_name, day, start_time, end_time, room]
 
@@ -96,7 +104,7 @@ def update_class_schedule():
         print("Invalid input. Please enter a valid number.")
 
     navigate_to_menu()
-
+        
 def delete_class_schedule():
     clear()
     print("Delete Class Schedule:")
@@ -130,23 +138,6 @@ def delete_class_schedule():
         print("Invalid input. Please enter a valid number.")
 
     navigate_to_menu()
-
-# def view_class_schedule():
-#     clear()
-#     print("View Class Schedule:")
-#     # Load existing schedule from CSV
-#     with open('schedule.csv', 'r') as file:
-#         reader = csv.reader(file)
-#         schedule = list(reader)
-
-#     if not schedule:
-#         print("No classes found.")
-#     else:
-#         print("Current Class Schedule:")
-#         for i, row in enumerate(schedule, start=1):
-#             print(f"{i}. {row[0]} - {row[1]} - {row[2]} to {row[3]} - Room {row[4]}")
-
-#     navigate_to_menu()
 
 def view_class_schedule():
     clear()
