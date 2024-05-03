@@ -1,9 +1,9 @@
-from title import main_logo
+from title import main_logo, add_logo 
 from simple_term_menu import TerminalMenu
 from clear import clear 
-import csv 
+import csv  
 from datetime import datetime 
-from unique_exceptions import InvalidTimeError, NumberInputError 
+from unique_exceptions import InvalidTimeError, NumberInputError, InvalidRoomError, EmptyInputError 
 
 print(main_logo)
 
@@ -12,7 +12,7 @@ def main_greeting():
 
 def navigate_to_menu():
     input("Press Enter to return to the main menu.\n")
-    print(main_logo) 
+    clear()
     main_menu()
 
 def add_class_schedule():
@@ -51,7 +51,7 @@ def add_class_schedule():
 
         print("Class added successfully.")
 
-        choice = input("Press '#' to add another class, or press Enter to return to the main menu:: ")
+        choice = input("Press '#' to add another class, or press Enter to return to the main menu: ")
         if choice != '#':
             break
 
@@ -74,34 +74,36 @@ def update_class_schedule():
     for i, row in enumerate(schedule, start=1):
         print(f"{i}. {row[0]} - {row[1]} - {row[2]} to {row[3]} - Room {row[4]}")
 
-    try:
-        choice = int(input("Enter the number of the class to update: ")) - 1
-        if 0 <= choice < len(schedule):
-            class_name = input(f"Enter Class Name ({schedule[choice][0]}): ") or schedule[choice][0]
-            day = input(f"Enter Day ({schedule[choice][1]}): ") or schedule[choice][1]
-            start_time = input(f"Enter Start Time ({schedule[choice][2]}): ") or schedule[choice][2]
-            end_time = input(f"Enter End Time ({schedule[choice][3]}): ") or schedule[choice][3]
+    while True:
+        try:
+            choice = int(input("Enter the number of the class to update: ")) - 1
+            if 0 <= choice < len(schedule):
+                break  
+            else:
+                print("Invalid selection.")
+        except ValueError:
+            print("Invalid input. Please enter a valid number.")
 
-            # Validate room number input
-            while True:
-                room_input = input(f"Enter Room Number ({schedule[choice][4]}): ") or schedule[choice][4]
-                try:
-                    room = int(room_input)
-                    break  # Exit the loop if the input is a valid number
-                except ValueError:
-                    print("Invalid room number. Please enter a valid number.")
+    class_name = input(f"Enter Class Name ({schedule[choice][0]}): ") or schedule[choice][0]
+    day = input(f"Enter Day ({schedule[choice][1]}): ") or schedule[choice][1]
+    start_time = input(f"Enter Start Time ({schedule[choice][2]}): ") or schedule[choice][2]
+    end_time = input(f"Enter End Time ({schedule[choice][3]}): ") or schedule[choice][3]
 
-            schedule[choice] = [class_name, day, start_time, end_time, room]
+    while True:
+        room_input = input(f"Enter Room Number ({schedule[choice][4]}): ") or schedule[choice][4]
+        try:
+            room = int(room_input)
+            break  
+        except ValueError:
+            print("Invalid room number. Please enter a valid number.")
 
-            with open('schedule.csv', 'w', newline='') as file:
-                writer = csv.writer(file)
-                writer.writerows(schedule)
+    schedule[choice] = [class_name, day, start_time, end_time, room]
 
-            print("Class schedule updated successfully.")
-        else:
-            print("Invalid selection.")
-    except ValueError:
-        print("Invalid input. Please enter a valid number.")
+    with open('schedule.csv', 'w', newline='') as file:
+        writer = csv.writer(file)
+        writer.writerows(schedule)
+
+    print("Class schedule updated successfully.")
 
     navigate_to_menu()
         
