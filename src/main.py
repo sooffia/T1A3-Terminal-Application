@@ -1,4 +1,4 @@
-from title import main_logo, add_logo 
+from title import main_logo, add_logo, update_logo, delete_logo, view_logo 
 from simple_term_menu import TerminalMenu
 from clear import clear 
 import csv  
@@ -15,8 +15,9 @@ def navigate_to_menu():
 
 def add_class_schedule():
     clear()
+    print(add_logo)
+    
     while True:
-
         class_name = input("Enter Class Name: ")
         day = input("Enter Day (e.g., Monday): ")
         
@@ -44,7 +45,7 @@ def add_class_schedule():
         
         room = input("Enter Room Number: ")
 
-        with open('schedule.csv', 'r', newline='') as file:
+        with open('src/schedule.csv', 'r', newline='') as file:
             reader = csv.reader(file)
             for row in reader:
                 if row[1] == day and row[2] <= start_time_str <= row[3]:
@@ -65,10 +66,11 @@ def add_class_schedule():
 
 def update_class_schedule():
     clear()
+    print(update_logo)
     print("Update Class Schedule:")
     # Load existing schedule from CSV
     schedule = []
-    with open('schedule.csv', 'r') as file:
+    with open('src/schedule.csv', 'r') as file:
         reader = csv.reader(file)
         schedule = list(reader)
 
@@ -96,22 +98,23 @@ def update_class_schedule():
     while True:
         try:
             class_name = input(f"Enter Class Name ({schedule[choice][0]}): ") or schedule[choice][0]
-            if class_name.strip():  # Check if input is not empty after stripping whitespace
+            if class_name.strip(): 
                 break
             else:
                 raise EmptyInputError()
         except EmptyInputError as e:
-            print(e)  # Print the error message
-            continue  # Prompt user again for input
+            print(e)  
+            continue  
 
     day = input(f"Enter Day ({schedule[choice][1]}): ") or schedule[choice][1]
     start_time = input(f"Enter Start Time ({schedule[choice][2]}): ") or schedule[choice][2]
     end_time = input(f"Enter End Time ({schedule[choice][3]}): ") or schedule[choice][3]
     room = input(f"Enter Room Number ({schedule[choice][4]}): ")
 
+
     schedule[choice] = [class_name, day, start_time, end_time, room]
 
-    with open('schedule.csv', 'w', newline='') as file:
+    with open('src/schedule.csv', 'w', newline='') as file:
         writer = csv.writer(file)
         writer.writerows(schedule)
 
@@ -121,28 +124,29 @@ def update_class_schedule():
     if choice == '#':
         update_class_schedule() 
     else:
-        navigate_to_menu() 
+        navigate_to_menu()
 
 def delete_class_schedule():
     clear()
+    print(delete_logo)
     print("Delete Class Schedule:")
     # Load existing schedule from CSV
     schedule = []
-    with open('schedule.csv', 'r') as file:
+    with open('src/schedule.csv', 'r') as file:
         reader = csv.reader(file)
         schedule = list(reader)
 
     if not schedule:
         print("No classes found.")
         navigate_to_menu()
-        return  # Exit the function if schedule is empty
+        return  
 
     print("Current Class Schedule:")
     for i, row in enumerate(schedule, start=1):
-        if len(row) >= 5:  # Check if row has at least five elements
+        if len(row) >= 5: 
             print(f"{i}. {row[0]} - {row[1]} - {row[2]} to {row[3]} - Room {row[4]}")
         else:
-            print(f"{i}. Invalid data in CSV")  # Print error message for invalid data
+            print(f"{i}. Invalid data in CSV")  
 
     try:
         choice = int(input("Enter the number of the class to delete: ")) - 1
@@ -151,21 +155,82 @@ def delete_class_schedule():
 
             with open('schedule.csv', 'w', newline='') as file:
                 writer = csv.writer(file)
-                writer.writerows(schedule)
+                for row in schedule:
+                    writer.writerow(row)
 
-            print("Class schedule deleted successfully.\n")
+            print("Class schedule deleted successfully.")
         else:
             print("Invalid selection.")
     except ValueError:
         print("Invalid input. Please enter a valid number.")
 
-    navigate_to_menu()
+    choice = input("Press '#' to delete another class, or press Enter to return to the main menu: ")
+    if choice == '#':
+        delete_class_schedule()
+    else:
+        navigate_to_menu()
+
+def delete_class_schedule():
+    clear()
+    print(delete_logo)
+    print("Delete Class Schedule:")
+    # Load existing schedule from CSV
+    schedule = []
+    with open('src/schedule.csv', 'r') as file:
+        reader = csv.reader(file)
+        schedule = list(reader)
+
+    if not schedule:
+        print("No classes found.")
+        navigate_to_menu()
+        return
+
+    print("Current Class Schedule:")
+    for i, row in enumerate(schedule, start=1):
+        if len(row) >= 5:
+            print(f"{i}. {row[0]} - {row[1]} - {row[2]} to {row[3]} - Room {row[4]}")
+        else:
+            print(f"{i}. Invalid data in CSV")
+
+    try:
+        choice = int(input("Enter the number of the class to delete: ")) - 1
+        if 0 <= choice < len(schedule):
+            del schedule[choice]
+
+            with open('src/schedule.csv', 'w', newline='') as file:
+                writer = csv.writer(file)
+                writer.writerows(schedule)
+
+            print("Class schedule deleted successfully. \n")
+
+            print("Updated Class Schedule:")
+            with open('src/schedule.csv', 'r') as updated_file:
+                updated_reader = csv.reader(updated_file)
+                updated_schedule = list(updated_reader)
+
+                for i, row in enumerate(updated_schedule, start=1):
+                    if len(row) >= 5:
+                        print(f"{i}. {row[0]} - {row[1]} - {row[2]} to {row[3]} - Room {row[4]}")
+                    else:
+                        print(f"{i}. Invalid data in CSV")
+
+        else:
+            print("Invalid selection.")
+    except ValueError:
+        print("Invalid input. Please enter a valid number.")
+
+    choice = input("Press '#' to delete another class, or press Enter to return to the main menu: ")
+    if choice == '#':
+        delete_class_schedule()
+    else:
+        navigate_to_menu()
 
 def view_class_schedule():
     clear()
+    print(view_logo)
     print("View Class Schedule:")
     # Load existing schedule from CSV
-    with open('schedule.csv', 'r') as file:
+    with open('src/schedule.csv', 'r') as file:
         reader = csv.reader(file)
         schedule = list(reader)
 
@@ -175,9 +240,10 @@ def view_class_schedule():
         print("Current Class Schedule:")
         days = {}
         for row in schedule:
-            if row[1] not in days:
-                days[row[1]] = []
-            days[row[1]].append(f"{row[0]} - {row[2]} to {row[3]} - Room {row[4]}")
+            if len(row) >= 5:  
+                if row[1] not in days:
+                    days[row[1]] = []
+                days[row[1]].append(f"{row[0]} - {row[2]} to {row[3]} - Room {row[4]} \n")
 
         for day in sorted(days.keys()):  
             print(f"\n{day}:")
@@ -218,7 +284,7 @@ def main_menu():
 
 
 def exit_program():
-    print("Thank you for using Your Class Schedule Manager!")
+    print("Thank you for using ScheduGenius!")
     exit()
 
 if __name__ == "__main__":
