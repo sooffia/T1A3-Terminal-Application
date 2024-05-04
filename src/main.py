@@ -3,9 +3,7 @@ from simple_term_menu import TerminalMenu
 from clear import clear 
 import csv  
 from datetime import datetime  
-from unique_exceptions import InvalidTimeError, SameDayOverlapError  
-
-print(main_logo)
+from unique_exceptions import InvalidTimeError, EmptyInputError   
 
 def main_greeting():
     print("Welcome to Your Class Schedule Manager")
@@ -18,6 +16,7 @@ def navigate_to_menu():
 def add_class_schedule():
     clear()
     while True:
+
         class_name = input("Enter Class Name: ")
         day = input("Enter Day (e.g., Monday): ")
         
@@ -41,29 +40,27 @@ def add_class_schedule():
                 print("Invalid time format. Please enter time in HH:MM format.")
             except InvalidTimeError as e:
                 print(e)
-                continue  # Ask again for end time
+                continue 
         
         room = input("Enter Room Number: ")
 
-        # Check for overlapping classes on the same day
         with open('schedule.csv', 'r', newline='') as file:
             reader = csv.reader(file)
             for row in reader:
                 if row[1] == day and row[2] <= start_time_str <= row[3]:
                     print("Error: Class overlaps with another class on the same day.")
-                    break  # Ask again for class details
+                    break  
             else:  # No overlap found, write to CSV
                 with open('schedule.csv', 'a', newline='') as file:
                     writer = csv.writer(file)
                     writer.writerow([class_name, day, start_time_str, end_time_str, room])
 
                 print("Class added successfully.")
-                break  # Exit the loop since class added successfully
+                break 
 
         choice = input("Press '#' to add another class, or press Enter to return to the main menu: ")
         if choice != '#':
             break
-
     navigate_to_menu()
 
 def update_class_schedule():
@@ -79,32 +76,38 @@ def update_class_schedule():
         print("No classes found.")
         navigate_to_menu()
 
-    print("Current Class Schedule:")
+    print("Current Class Schedule: \n")
     for i, row in enumerate(schedule, start=1):
-        print(f"{i}. {row[0]} - {row[1]} - {row[2]} to {row[3]} - Room {row[4]}")
+        if row and len(row) >= 5: 
+            print(f"{i}. {row[0]} - {row[1]} - {row[2]} to {row[3]} - Room {row[4]}")
+        elif row:  
+            print(f"Invalid data format in row {i}: {row}")
 
     while True:
         try:
             choice = int(input("Enter the number of the class to update: ")) - 1
             if 0 <= choice < len(schedule):
-                break  
+                break
             else:
                 print("Invalid selection.")
         except ValueError:
             print("Invalid input. Please enter a valid number.")
 
-    class_name = input(f"Enter Class Name ({schedule[choice][0]}): ") or schedule[choice][0]
+    while True:
+        try:
+            class_name = input(f"Enter Class Name ({schedule[choice][0]}): ") or schedule[choice][0]
+            if class_name.strip():  # Check if input is not empty after stripping whitespace
+                break
+            else:
+                raise EmptyInputError()
+        except EmptyInputError as e:
+            print(e)  # Print the error message
+            continue  # Prompt user again for input
+
     day = input(f"Enter Day ({schedule[choice][1]}): ") or schedule[choice][1]
     start_time = input(f"Enter Start Time ({schedule[choice][2]}): ") or schedule[choice][2]
     end_time = input(f"Enter End Time ({schedule[choice][3]}): ") or schedule[choice][3]
-
-    while True:
-        room_input = input(f"Enter Room Number ({schedule[choice][4]}): ") or schedule[choice][4]
-        try:
-            room = int(room_input)
-            break  
-        except ValueError:
-            print("Invalid room number. Please enter a valid number.")
+    room = input(f"Enter Room Number ({schedule[choice][4]}): ")
 
     schedule[choice] = [class_name, day, start_time, end_time, room]
 
@@ -114,8 +117,12 @@ def update_class_schedule():
 
     print("Class schedule updated successfully.")
 
-    navigate_to_menu()
-        
+    choice = input("Press '#' to update another class, or press Enter to return to the main menu: \n")
+    if choice == '#':
+        update_class_schedule() 
+    else:
+        navigate_to_menu() 
+
 def delete_class_schedule():
     clear()
     print("Delete Class Schedule:")
@@ -128,10 +135,14 @@ def delete_class_schedule():
     if not schedule:
         print("No classes found.")
         navigate_to_menu()
+        return  # Exit the function if schedule is empty
 
     print("Current Class Schedule:")
     for i, row in enumerate(schedule, start=1):
-        print(f"{i}. {row[0]} - {row[1]} - {row[2]} to {row[3]} - Room {row[4]}")
+        if len(row) >= 5:  # Check if row has at least five elements
+            print(f"{i}. {row[0]} - {row[1]} - {row[2]} to {row[3]} - Room {row[4]}")
+        else:
+            print(f"{i}. Invalid data in CSV")  # Print error message for invalid data
 
     try:
         choice = int(input("Enter the number of the class to delete: ")) - 1
@@ -168,7 +179,7 @@ def view_class_schedule():
                 days[row[1]] = []
             days[row[1]].append(f"{row[0]} - {row[2]} to {row[3]} - Room {row[4]}")
 
-        for day in sorted(days.keys()):  # Sort the days for consistency
+        for day in sorted(days.keys()):  
             print(f"\n{day}:")
             classes = days[day]
             for class_info in classes:
@@ -184,6 +195,13 @@ def main_menu():
         "View Class Schedule",
         "Exit"
     ]
+
+    print(main_logo) 
+
+    if not options:  # Check if options list is empty
+        print("Error: No menu options defined.")
+        return
+
     terminal_menu = TerminalMenu(options)
     menu_entry_index = terminal_menu.show()
 
@@ -197,6 +215,7 @@ def main_menu():
         view_class_schedule()
     elif menu_entry_index == 4:
         exit_program()
+
 
 def exit_program():
     print("Thank you for using Your Class Schedule Manager!")
