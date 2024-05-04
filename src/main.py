@@ -2,8 +2,8 @@ from title import main_logo, add_logo
 from simple_term_menu import TerminalMenu
 from clear import clear 
 import csv  
-from datetime import datetime 
-from unique_exceptions import InvalidTimeError, NumberInputError, InvalidRoomError, EmptyInputError 
+from datetime import datetime  
+from unique_exceptions import InvalidTimeError, SameDayOverlapError  
 
 print(main_logo)
 
@@ -34,22 +34,31 @@ def add_class_schedule():
             try:
                 end_time = datetime.strptime(end_time_str, "%H:%M")
                 if end_time <= start_time:
-                    raise InvalidTimeError  
+                    raise InvalidTimeError("End time must be later than start time.")
                 else:
                     break  
             except ValueError:
                 print("Invalid time format. Please enter time in HH:MM format.")
             except InvalidTimeError as e:
-                print(e)  
+                print(e)
+                continue  # Ask again for end time
         
         room = input("Enter Room Number: ")
 
-        # Write to the CSV file
-        with open('schedule.csv', 'a', newline='') as file:
-            writer = csv.writer(file)
-            writer.writerow([class_name, day, start_time, end_time, room])
+        # Check for overlapping classes on the same day
+        with open('schedule.csv', 'r', newline='') as file:
+            reader = csv.reader(file)
+            for row in reader:
+                if row[1] == day and row[2] <= start_time_str <= row[3]:
+                    print("Error: Class overlaps with another class on the same day.")
+                    break  # Ask again for class details
+            else:  # No overlap found, write to CSV
+                with open('schedule.csv', 'a', newline='') as file:
+                    writer = csv.writer(file)
+                    writer.writerow([class_name, day, start_time_str, end_time_str, room])
 
-        print("Class added successfully.")
+                print("Class added successfully.")
+                break  # Exit the loop since class added successfully
 
         choice = input("Press '#' to add another class, or press Enter to return to the main menu: ")
         if choice != '#':
