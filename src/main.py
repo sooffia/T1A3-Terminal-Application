@@ -2,7 +2,7 @@ from title import main_logo, add_logo, update_logo, delete_logo, view_logo
 from clear import clear 
 import csv  
 from datetime import datetime  
-from unique_exceptions import InvalidTimeError, EmptyInputError
+from unique_exceptions import InvalidTimeError, EmptyInputError, InvalidClassSelectionError, InvalidScheduleFormatError  
 
 def main_greeting():
     print("\nWelcome to Your Class Schedule Manager!")
@@ -152,76 +152,26 @@ def delete_class_schedule():
         else:
             print(f"{i}. Invalid data in CSV")  
 
+    valid_choices = list(range(1, len(schedule) + 1))  # List of valid class numbers
     try:
-        choice = int(input("Enter the number of the class to delete: ")) - 1
-        if 0 <= choice < len(schedule):
+        choice = int(input("Enter the number of the class to delete: "))
+        if choice not in valid_choices:
+            raise InvalidClassSelectionError()
+        else:
+            choice -= 1  # Adjust index for list deletion
+
             del schedule[choice]
 
-            with open('schedule.csv', 'w', newline='') as file:
+            with open('src/schedule.csv', 'w', newline='') as file:
                 writer = csv.writer(file)
                 for row in schedule:
                     writer.writerow(row)
 
             print("Class schedule deleted successfully.")
-        else:
-            print("Invalid selection.")
     except ValueError:
         print("Invalid input. Please enter a valid number.")
-
-    choice = input("Press '#' to delete another class, or press Enter to return to the main menu: ")
-    if choice == '#':
-        delete_class_schedule()
-    else:
-        navigate_to_menu()
-
-def delete_class_schedule():
-    clear()
-    print(delete_logo)
-    print("Delete Class Schedule:")
-    # Load existing schedule from CSV
-    schedule = []
-    with open('src/schedule.csv', 'r') as file:
-        reader = csv.reader(file)
-        schedule = list(reader)
-
-    if not schedule:
-        print("No classes found.")
-        navigate_to_menu()
-        return
-
-    print("Current Class Schedule:")
-    for i, row in enumerate(schedule, start=1):
-        if len(row) >= 5:
-            print(f"{i}. {row[0]} - {row[1]} - {row[2]} to {row[3]} - Room {row[4]}")
-        else:
-            print(f"{i}. Invalid data in CSV")
-
-    try:
-        choice = int(input("Enter the number of the class to delete: ")) - 1
-        if 0 <= choice < len(schedule):
-            del schedule[choice]
-
-            with open('src/schedule.csv', 'w', newline='') as file:
-                writer = csv.writer(file)
-                writer.writerows(schedule)
-
-            print("Class schedule deleted successfully. \n")
-
-            print("Updated Class Schedule:")
-            with open('src/schedule.csv', 'r') as updated_file:
-                updated_reader = csv.reader(updated_file)
-                updated_schedule = list(updated_reader)
-
-                for i, row in enumerate(updated_schedule, start=1):
-                    if len(row) >= 5:
-                        print(f"{i}. {row[0]} - {row[1]} - {row[2]} to {row[3]} - Room {row[4]}")
-                    else:
-                        print(f"{i}. Invalid data in CSV")
-
-        else:
-            print("Invalid selection.")
-    except ValueError:
-        print("Invalid input. Please enter a valid number.")
+    except InvalidClassSelectionError as e:
+        print(e)
 
     choice = input("Press '#' to delete another class, or press Enter to return to the main menu: ")
     if choice == '#':
@@ -234,28 +184,38 @@ def view_class_schedule():
     print(view_logo)
     print("View Class Schedule:")
     # Load existing schedule from CSV
-    with open('src/schedule.csv', 'r') as file:
-        reader = csv.reader(file)
-        schedule = list(reader)
+    try:
+        with open('src/schedule.csv', 'r') as file:
+            reader = csv.reader(file)
+            schedule = [row for row in reader if row]
 
-    if not schedule:
-        print("No classes found.")
-    else:
-        print("Current Class Schedule:")
-        days = {}
-        for row in schedule:
-            if len(row) >= 5:  
-                if row[1] not in days:
-                    days[row[1]] = []
-                days[row[1]].append(f"{row[0]} - {row[2]} to {row[3]} - Room {row[4]} \n")
+        if not schedule:
+            print("No classes found.")
+        else:
+            print("Current Class Schedule:")
+            days = {}
+            for row in schedule:
+                if len(row) >= 5:
+                    if row[1] not in days:
+                        days[row[1]] = []
+                    days[row[1]].append(f"{row[0]} - {row[2]} to {row[3]} - Room {row[4]} \n")
+                else:
+                    raise InvalidScheduleFormatError()
 
-        for day in sorted(days.keys()):  
-            print(f"\n{day}:")
-            classes = days[day]
-            for class_info in classes:
-                print(f"- {class_info}")
+            day_order = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"]
+            sorted_days = sorted(days.items(), key=lambda x: day_order.index(x[0].lower()))
 
-    navigate_to_menu()
+            for day, classes in sorted_days:
+                print(f"\n{day.capitalize()}:") 
+                for class_info in classes:
+                    print(f"- {class_info}")
+
+    except InvalidScheduleFormatError:
+        print("Error: Invalid schedule format. Please check the format of your schedule file.")
+    except FileNotFoundError:
+        print("Error: Schedule file not found.")
+    finally:
+        navigate_to_menu()
 
 def main_menu():
     options = [
