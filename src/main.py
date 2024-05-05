@@ -2,8 +2,7 @@ from title import main_logo, add_logo, update_logo, delete_logo, view_logo
 from clear import clear 
 import csv  
 from datetime import datetime  
-from prettytable import PrettyTable 
-# from colored import Fore, Back, Style
+from colored import fg, attr 
 from unique_exceptions import InvalidTimeError, EmptyInputError, InvalidClassSelectionError, InvalidScheduleFormatError  
 
 def main_greeting():
@@ -228,7 +227,7 @@ def main_menu():
         "Exit"
     ]
 
-    print(main_logo) 
+    print(main_logo)
 
     if not options:  # Check if options list is empty
         print("Error: No menu options defined.")
@@ -238,7 +237,8 @@ def main_menu():
           "\n(Enter the number of your choice and press <Enter>)\n")
 
     for i, option in enumerate(options, start=1):
-        print(f"{i}. {option}")
+        colored_option = f"{fg(21)}{attr(1)}{i}.{attr(0)} {option}"
+        print(colored_option)
 
     choice = input("Enter your choice: ")
 
@@ -265,38 +265,40 @@ if __name__ == "__main__":
         main_menu()
 
 # def main_menu():
-#     print("\nPlease select from the following options:\n"
-#           "\n(Use the up and down arrow keys to navigate the menu.)\n"
-#           "\n(Press <Enter> to choose an option)\n")
-
 #     options = [
 #         "Add Class",
 #         "Update Class",
 #         "Delete Class",
 #         "View Class Schedule",
-#         "Exit\n"
+#         "Exit"
 #     ]
 
 #     print(main_logo) 
 
-#     if not options:
+#     if not options:  # Check if options list is empty
 #         print("Error: No menu options defined.")
 #         return
 
-#     terminal_menu = TerminalMenu(options)
-#     menu_entry_index = terminal_menu.show()
+#     print("\nPlease select from the following options:\n"
+#           "\n(Enter the number of your choice and press <Enter>)\n")
 
-#     if menu_entry_index == 0:
+#     for i, option in enumerate(options, start=1):
+#         print(f"{i}. {option}")
+
+#     choice = input("Enter your choice: ")
+
+#     if choice == '1':
 #         add_class_schedule()
-#     elif menu_entry_index == 1:
+#     elif choice == '2':
 #         update_class_schedule()
-#     elif menu_entry_index == 2:
+#     elif choice == '3':
 #         delete_class_schedule()
-#     elif menu_entry_index == 3:
+#     elif choice == '4':
 #         view_class_schedule()
-#     elif menu_entry_index == 4:
+#     elif choice == '5':
 #         exit_program()
-
+#     else:
+#         print("Invalid choice. Please enter a valid option number.")
 
 # def exit_program():
 #     print("Thank you for using ScheduGenius!")
