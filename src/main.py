@@ -57,7 +57,7 @@ def add_class_schedule():
                 if len(row) >= 4 and row[1] == day and row[2] <= start_time_str <= row[3]:
                     print("Error: Class overlaps with another class on the same day.")
                     break
-            else:  # No overlap found, write to CSV
+            else:
                 with open('src/schedule.csv', 'a', newline='') as file:
                     writer = csv.writer(file)
                     writer.writerow([class_name, day, start_time_str, end_time_str, room])
@@ -153,13 +153,13 @@ def delete_class_schedule():
         else:
             print(f"{i}. Invalid data in CSV")  
 
-    valid_choices = list(range(1, len(schedule) + 1))  # List of valid class numbers
+    valid_choices = list(range(1, len(schedule) + 1))  
     try:
         choice = int(input("Enter the number of the class to delete: "))
         if choice not in valid_choices:
             raise InvalidClassSelectionError()
         else:
-            choice -= 1  # Adjust index for list deletion
+            choice -= 1 
 
             del schedule[choice]
 
@@ -229,7 +229,7 @@ def main_menu():
 
     print(main_logo)
 
-    if not options:  # Check if options list is empty
+    if not options:  
         print("Error: No menu options defined.")
         return
 
@@ -263,48 +263,3 @@ if __name__ == "__main__":
     main_greeting()
     while True:
         main_menu()
-
-# def main_menu():
-#     options = [
-#         "Add Class",
-#         "Update Class",
-#         "Delete Class",
-#         "View Class Schedule",
-#         "Exit"
-#     ]
-
-#     print(main_logo) 
-
-#     if not options:  # Check if options list is empty
-#         print("Error: No menu options defined.")
-#         return
-
-#     print("\nPlease select from the following options:\n"
-#           "\n(Enter the number of your choice and press <Enter>)\n")
-
-#     for i, option in enumerate(options, start=1):
-#         print(f"{i}. {option}")
-
-#     choice = input("Enter your choice: ")
-
-#     if choice == '1':
-#         add_class_schedule()
-#     elif choice == '2':
-#         update_class_schedule()
-#     elif choice == '3':
-#         delete_class_schedule()
-#     elif choice == '4':
-#         view_class_schedule()
-#     elif choice == '5':
-#         exit_program()
-#     else:
-#         print("Invalid choice. Please enter a valid option number.")
-
-# def exit_program():
-#     print("Thank you for using ScheduGenius!")
-#     exit()
-
-# if __name__ == "__main__":
-#     main_greeting()
-#     while True:
-#         main_menu()
