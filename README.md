@@ -7,6 +7,7 @@
 With ScheduGenius, a class scheduling organizer that allows users to construct highly customized and adaptable class schedules, users can easily manage their academic lives. By providing intuitive tools for adding, editing, removing classes, and accessing schedules, ScheduGenius allows users to manage their classes effectively. This project is intended to demonstrate my ability to work with a variety of development tools, with an emphasis on the Python programming language. Through this project, I seek to expand my capabilities in designing, implementing, and thoroughly testing an application by developing a terminal-based (command line) application.
 
 ![ScheduGenius](./docs/schedugenius_home.png)
+
 ## Target Audience
 The target audience for the ScheduGenius terminal application includes both students and teachers. For students, ScheduGenius offers a convenient way to manage their class schedules, helping them stay organized and on track with their academic commitments. Teachers can also benefit from ScheduGenius by using it to manage their teaching schedules, track class timings, and organize classroom activities effectively. By catering to both students and teachers, ScheduGenius aims to streamline the scheduling process and enhance productivity in educational environments.
 
@@ -30,17 +31,17 @@ Overall, the Class Schedule Manager terminal application embodies a user-centric
 The main menu feature acts as the central control hub of the class scheduling terminal application, orchestrating user interactions and navigation through various functionalities. It utilises Python variables like options to list available actions and choice to capture user input, creating a dynamic and responsive interface. The implementation of loops and conditional structures ensures that user choices are validated, allowing only valid options to be processed. For instance, if a user enters an invalid choice or an unrecognized input, the program responds with an appropriate error message, guiding the user to correct their selection. This robust error handling mechanism contributes significantly to a smooth and user-friendly experience, showcasing Python's versatility in managing user interactions and controlling program flow effectively.
 
 ### 2. Add Class
-The "Add Class Schedule" feature within the class scheduling terminal application enables users to seamlessly input new classes into their schedule. Upon selecting this option from the main menu, the program clears the screen and displays an add logo, creating a visually distinct interface to guide users. Users are then prompted to enter various details for the new class, such as the class name, day (e.g., Monday), start time (in HH:MM format), end time (in HH:MM format), and room number.
+The "Add Class" feature within the class scheduling terminal application enables users to seamlessly input new classes into their schedule. Upon selecting this option from the main menu, the program clears the screen and displays an add logo, creating a visually distinct interface to guide users. Users are then prompted to enter various details for the new class, such as the class name, day (e.g., Monday), start time (in HH:MM format), end time (in HH:MM format), and room number.
 
 This feature demonstrates the effective use of variables and variable scope. Class_name, day, start_time_str, end_time_str, and room are utilised to store user inputs and manage data within the function's scope. Loops are employed to validate user inputs, ensuring that the entered day is valid (Monday to Sunday) and that the time inputs adhere to the correct format. Conditional control structures are used to handle exceptions, such as raising an InvalidTimeError if the end time is not later than the start time.
 
 Furthermore, error-handling mechanisms are incorporated to provide a smooth user experience. For instance, an error message is displayed if a class overlaps with another class on the same day, preventing scheduling conflicts. If no overlaps are found, the class information is written to a CSV file, and a success message is shown, allowing users to add another class or return to the main menu for further actions.
 
 ### 3. Update Class
-The "Update Class Schedule" feature empowers users to modify existing classes within their schedule with ease. It utilizes a set of variables, including class_name, day, start_time, end_time, and room, to manage the updating process. Python's loops are employed to guide users through updating class details, validating each input to ensure correctness and adherence to required formats. Error handling mechanisms are seamlessly integrated to handle unexpected scenarios, such as invalid inputs or selection of non-existent classes. Upon successful updates, the feature efficiently overwrites the relevant data in the CSV file, reflecting the changes made by the user. This functionality showcases Python's proficiency in data manipulation, user interaction, and error handling, providing users with a reliable and straightforward way to update their class schedules.
+The "Update Class" feature empowers users to modify existing classes within their schedule with ease. It utilizes a set of variables, including class_name, day, start_time, end_time, and room, to manage the updating process. Python's loops are employed to guide users through updating class details, validating each input to ensure correctness and adherence to required formats. Error handling mechanisms are seamlessly integrated to handle unexpected scenarios, such as invalid inputs or selection of non-existent classes. Upon successful updates, the feature efficiently overwrites the relevant data in the CSV file, reflecting the changes made by the user. This functionality showcases Python's proficiency in data manipulation, user interaction, and error handling, providing users with a reliable and straightforward way to update their class schedules.
 
 ### 4. Delete Class
-The "Delete Class Schedule" feature in the class scheduling terminal application empowers users to efficiently remove unwanted courses from their schedule. This feature prominently demonstrates the use of variables and variable scope, as various variables such as schedule, valid choices, and choice are utilised to manage data and user inputs within the function's scope. Loops and conditional control structures are also effectively employed to handle user inputs, validations, and deletion processes.
+The "Delete Class" feature in the class scheduling terminal application empowers users to efficiently remove unwanted courses from their schedule. This feature prominently demonstrates the use of variables and variable scope, as various variables such as schedule, valid choices, and choice are utilised to manage data and user inputs within the function's scope. Loops and conditional control structures are also effectively employed to handle user inputs, validations, and deletion processes.
 
 When users select the delete class option from the main menu, the program clears the screen and displays a delete logo, providing a visually distinct interface for users to navigate the deletion process smoothly. The current class schedule is loaded from the CSV file and presented to the user for reference. Users input the number of the class they want to delete, with input validation ensuring a valid class number is entered.
 
@@ -49,7 +50,7 @@ Error handling mechanisms are integrated into the feature to enhance user experi
 ## Implementation Plan 
 To adhere to the marking rubric's requirements for a well-organized implementation plan, I incorporated Trello as a pivotal tool in my development process. This integration allowed me to intricately monitor progress, categorize distinct features, and maintain a systematic task list. Each feature received a detailed breakdown of tasks, with deadlines strategically set approximately a week ahead of the actual due date. This proactive scheduling strategy provided a buffer for comprehensive testing, error handling, and addressing any unexpected hurdles encountered during development. Leveraging Trello's visual indicators, such as turning deadline boxes green upon task completion, fostered a sense of achievement and enhanced the overall project management efficiency.
 
-Here is a link to my trello: 
+Here is a link to my trello: [Trello board](https://trello.com/b/pvjBsD7b/t1a3-terminal-application)  
 
 Trello was essential in effectively organising the entire development process of my class schedule manager terminal application. Trello facilitated the whole software development process, from early planning to testing, development, and refining the codebase. It enabled agile modifications and enhancements throughout the process. An important lesson learned is the Trello board's ever-changing nature, as tasks were continuously added, updated, or completed. This flexibility and unintentional alignment with Agile approaches demonstrated the non-linear character of the development process.
 
@@ -127,7 +128,7 @@ Focusing on these core components improved the application's usability and funct
         Handle Exceptions (e.g., Invalid Schedule Format, File Not Found)
         Prompt User to Return to Main Menu
 
-### Main Program
+### Main Program 
 
     Define MainProgram():
         Display Main Greeting
@@ -215,7 +216,7 @@ The application has undergone development and testing on the following system:
     - 16GB Unified Memory
     - 12GB SSD
 
-### Dependencies
+### Dependencies: 
 
 The ScheduGenius program requires the following dependencies, all of which are automatically installed into the virtual environment when you follow the steps above:
 ```txt
