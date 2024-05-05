@@ -1,8 +1,12 @@
 # ScheduGenius 
 
+### [GitHub Repo](https://github.com/sooffia/T1A3_Terminal-Application/tree/main) 
+### [Trello board](https://trello.com/b/pvjBsD7b/t1a3-terminal-application) 
+
 ## Purpose 
 With ScheduGenius, a class scheduling organizer that allows users to construct highly customized and adaptable class schedules, users can easily manage their academic lives. By providing intuitive tools for adding, editing, removing classes, and accessing schedules, ScheduGenius allows users to manage their classes effectively. This project is intended to demonstrate my ability to work with a variety of development tools, with an emphasis on the Python programming language. Through this project, I seek to expand my capabilities in designing, implementing, and thoroughly testing an application by developing a terminal-based (command line) application.
 
+![ScheduGenius](./docs/schedugenius_home.png)
 ## Target Audience
 The target audience for the ScheduGenius terminal application includes both students and teachers. For students, ScheduGenius offers a convenient way to manage their class schedules, helping them stay organized and on track with their academic commitments. Teachers can also benefit from ScheduGenius by using it to manage their teaching schedules, track class timings, and organize classroom activities effectively. By catering to both students and teachers, ScheduGenius aims to streamline the scheduling process and enhance productivity in educational environments.
 
@@ -145,6 +149,78 @@ Focusing on these core components improved the application's usability and funct
 If __name__ == "__main__":
     Run MainProgram()
 
-## Tips (Mac Users Only)
+## Installation Guide 
 
-## Install Instructions (MacOS Users Only)
+### System Requirements: 
+
+This application is designed to run on MacOS systems using the Terminal application. If you are using Windows, consider using the Ubuntu terminal through Windows Subsystem for Linux (WSL).
+
+Step 1: Open the Terminal
+- First, open the Terminal application on your Mac. You can do this by searching for "Terminal" in Spotlight or navigating to Applications > Utilities > Terminal.
+
+Step 2: Check Python Version
+- To check if Python is installed on your computer and verify the version, type the following command in the Terminal and press Enter: 
+```shell
+python --version
+```
+If Python is not installed or you need to update it, you can download the latest version from the official Python website at python.org.
+
+Please ensure that you have Python 3.11+ installed. 
+
+### Installation Steps: 
+
+1. Choose a folder where you want to save the terminal application. (Example, your desktop folder)
+```shell
+cd /Users/username/Desktop
+``` 
+
+2. Once inside the selected folder, clone the application repository from Github using the command: 
+```shell 
+git clone https://github.com/jordansbenjamin/Blackjack_terminal-app.git
+```
+This command will clone the repository from the following window on [Github Repo](https://github.com/sooffia/T1A3_Terminal-Application/tree/main) 
+
+3. Navigate to the folder containing the cloned repository using the terminal. 
+```shell
+cd T1A3_Terminal-Application/src
+```
+
+4. Within the repository folder, type the following command and press Enter: 
+```shell
+./run_application.sh
+``` 
+This command will automatically execute the bash script contained in the folder, performing the following actions:
+- Checks if Python version 3 is installed and displays a warning message if not available.
+- Creates a virtual environment named .venv.
+- Activates the virtual environment.
+- Installs all application dependencies listed in the requirements.txt file.
+- Runs the Python file.
+- Deactivates the virtual environment after completing the application execution.
+
+Note: If step 4 encounters issues, run the following command and then retry. 
+```shell
+chmod +x run_application.sh
+``` 
+
+### Operating System Requirements: 
+
+ScheduGenius is compatible with Windows, Mac OS X, and Linux.
+- Windows: Windows 7, 10, or 11
+- Mac OS X: Version 10.11 or higher, 64-bit
+
+The application has undergone development and testing on the following system:
+
+- 2021 Retina XDR 16-inch Macbook Pro
+    - Apple M1 Pro Chip
+    - 16GB Unified Memory
+    - 12GB SSD
+
+### Dependencies
+
+The ScheduGenius program requires the following dependencies, all of which are automatically installed into the virtual environment when you follow the steps above:
+```txt
+clear==2.0.0
+colored==1.4.4
+```
+
+## References: 

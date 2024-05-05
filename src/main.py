@@ -240,7 +240,7 @@ def main_menu():
         colored_option = f"{fg(21)}{attr(1)}{i}.{attr(0)} {option}"
         print(colored_option)
 
-    choice = input("Enter your choice: ")
+    choice = input("Enter your choice: \n")
 
     if choice == '1':
         add_class_schedule()
