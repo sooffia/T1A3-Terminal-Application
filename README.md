@@ -23,7 +23,7 @@ Adding a class involves inputting details such as class name, day, start time, e
 Updating classes allows users to modify existing class details, with the program guiding them through the process step by step. Similarly, deleting classes is streamlined, ensuring users can efficiently remove unwanted classes from their schedule.
 
 Viewing the class schedule presents a comprehensive overview organized by days of the week, providing users with a clear snapshot of their classes and timings.
-Overall, the Class Schedule Manager terminal application embodies a user-centric design, robust functionality, and unwavering adherence to industry standards, offering a seamless experience for managing class schedules effectively.
+Overall, the class schedule terminal application embodies a user-centric design, robust functionality, and unwavering adherence to industry standards, offering a seamless experience for managing class schedules effectively.
 
 ## Features 
 
@@ -48,7 +48,7 @@ When users select the delete class option from the main menu, the program clears
 Error handling mechanisms are integrated into the feature to enhance user experience. For instance, if the user provides invalid inputs or selects an invalid class number, appropriate error messages are displayed to guide them through the correction process. Once a valid class is selected for deletion, it is removed from the schedule, and the CSV file is updated accordingly. A success message confirms the deletion, and users can delete another class or return to the main menu for further actions.
 
 ## Implementation Plan 
-To adhere to the marking rubric's requirements for a well-organized implementation plan, I incorporated Trello as a pivotal tool in my development process. This integration allowed me to intricately monitor progress, categorize distinct features, and maintain a systematic task list. Each feature received a detailed breakdown of tasks, with deadlines strategically set approximately a week ahead of the actual due date. This proactive scheduling strategy provided a buffer for comprehensive testing, error handling, and addressing any unexpected hurdles encountered during development. Leveraging Trello's visual indicators, such as turning deadline boxes green upon task completion, fostered a sense of achievement and enhanced the overall project management efficiency.
+To adhere to the marking rubric's requirements for a well-organised implementation plan, I incorporated Trello as a pivotal tool in my development process. This integration allowed me to intricately monitor progress, categorize distinct features, and maintain a systematic task list. Each feature received a detailed breakdown of tasks, with deadlines strategically set approximately a week ahead of the actual due date. This proactive scheduling strategy provided a buffer for comprehensive testing, error handling, and addressing any unexpected hurdles encountered during development. Leveraging Trello's visual indicators, such as turning deadline boxes green upon task completion, fostered a sense of achievement and enhanced the overall project management efficiency.
 
 Here is a link to my trello: [Trello board](https://trello.com/b/pvjBsD7b/t1a3-terminal-application)  
 (Regrettably,I accidentally deleted my Trello board and had to start over again.)
