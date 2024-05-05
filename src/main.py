@@ -1,12 +1,11 @@
 from title import main_logo, add_logo, update_logo, delete_logo, view_logo 
-from simple_term_menu import TerminalMenu
 from clear import clear 
 import csv  
 from datetime import datetime  
-from unique_exceptions import InvalidTimeError, EmptyInputError   
+from unique_exceptions import InvalidTimeError, EmptyInputError
 
 def main_greeting():
-    print("Welcome to Your Class Schedule Manager")
+    print("\nWelcome to Your Class Schedule Manager!")
 
 def navigate_to_menu():
     input("Press Enter to return to the main menu.\n")
@@ -19,16 +18,22 @@ def add_class_schedule():
     
     while True:
         class_name = input("Enter Class Name: ")
-        day = input("Enter Day (e.g., Monday): ")
-        
+
+        while True:
+            day = input("Enter Day (e.g., Monday): ")
+            if day.lower() in ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"]:
+                break
+            else:
+                print("Invalid day name. Please enter a valid day.")
+
         while True:
             start_time_str = input("Enter Start Time (HH:MM): ")
             try:
                 start_time = datetime.strptime(start_time_str, "%H:%M")
-                break  
+                break
             except ValueError:
                 print("Invalid time format. Please enter time in HH:MM format.")
-        
+
         while True:
             end_time_str = input("Enter End Time (HH:MM): ")
             try:
@@ -36,33 +41,32 @@ def add_class_schedule():
                 if end_time <= start_time:
                     raise InvalidTimeError("End time must be later than start time.")
                 else:
-                    break  
+                    break
             except ValueError:
                 print("Invalid time format. Please enter time in HH:MM format.")
             except InvalidTimeError as e:
                 print(e)
-                continue 
-        
+                continue
+
         room = input("Enter Room Number: ")
 
         with open('src/schedule.csv', 'r', newline='') as file:
             reader = csv.reader(file)
             for row in reader:
-                if row[1] == day and row[2] <= start_time_str <= row[3]:
+                if len(row) >= 4 and row[1] == day and row[2] <= start_time_str <= row[3]:
                     print("Error: Class overlaps with another class on the same day.")
-                    break  
+                    break
             else:  # No overlap found, write to CSV
-                with open('schedule.csv', 'a', newline='') as file:
+                with open('src/schedule.csv', 'a', newline='') as file:
                     writer = csv.writer(file)
                     writer.writerow([class_name, day, start_time_str, end_time_str, room])
 
                 print("Class added successfully.")
-                break 
+                choice = input("Press '#' to add another class, or press Enter to return to the main menu: ")
+                if choice != '#':
+                    break
 
-        choice = input("Press '#' to add another class, or press Enter to return to the main menu: ")
-        if choice != '#':
-            break
-    navigate_to_menu()
+        navigate_to_menu()
 
 def update_class_schedule():
     clear()
@@ -268,20 +272,26 @@ def main_menu():
         print("Error: No menu options defined.")
         return
 
-    terminal_menu = TerminalMenu(options)
-    menu_entry_index = terminal_menu.show()
+    print("\nPlease select from the following options:\n"
+          "\n(Enter the number of your choice and press <Enter>)\n")
 
-    if menu_entry_index == 0:
+    for i, option in enumerate(options, start=1):
+        print(f"{i}. {option}")
+
+    choice = input("Enter your choice: ")
+
+    if choice == '1':
         add_class_schedule()
-    elif menu_entry_index == 1:
+    elif choice == '2':
         update_class_schedule()
-    elif menu_entry_index == 2:
+    elif choice == '3':
         delete_class_schedule()
-    elif menu_entry_index == 3:
+    elif choice == '4':
         view_class_schedule()
-    elif menu_entry_index == 4:
+    elif choice == '5':
         exit_program()
-
+    else:
+        print("Invalid choice. Please enter a valid option number.")
 
 def exit_program():
     print("Thank you for using ScheduGenius!")
@@ -291,3 +301,46 @@ if __name__ == "__main__":
     main_greeting()
     while True:
         main_menu()
+
+# def main_menu():
+#     print("\nPlease select from the following options:\n"
+#           "\n(Use the up and down arrow keys to navigate the menu.)\n"
+#           "\n(Press <Enter> to choose an option)\n")
+
+#     options = [
+#         "Add Class",
+#         "Update Class",
+#         "Delete Class",
+#         "View Class Schedule",
+#         "Exit\n"
+#     ]
+
+#     print(main_logo) 
+
+#     if not options:
+#         print("Error: No menu options defined.")
+#         return
+
+#     terminal_menu = TerminalMenu(options)
+#     menu_entry_index = terminal_menu.show()
+
+#     if menu_entry_index == 0:
+#         add_class_schedule()
+#     elif menu_entry_index == 1:
+#         update_class_schedule()
+#     elif menu_entry_index == 2:
+#         delete_class_schedule()
+#     elif menu_entry_index == 3:
+#         view_class_schedule()
+#     elif menu_entry_index == 4:
+#         exit_program()
+
+
+# def exit_program():
+#     print("Thank you for using ScheduGenius!")
+#     exit()
+
+# if __name__ == "__main__":
+#     main_greeting()
+#     while True:
+#         main_menu()
