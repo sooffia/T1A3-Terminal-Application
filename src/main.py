@@ -2,6 +2,8 @@ from title import main_logo, add_logo, update_logo, delete_logo, view_logo
 from clear import clear 
 import csv  
 from datetime import datetime  
+from prettytable import PrettyTable 
+# from colored import Fore, Back, Style
 from unique_exceptions import InvalidTimeError, EmptyInputError, InvalidClassSelectionError, InvalidScheduleFormatError  
 
 def main_greeting():
