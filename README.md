@@ -12,7 +12,7 @@ With ScheduGenius, a class scheduling organizer that allows users to construct h
 The target audience for the ScheduGenius terminal application includes both students and teachers. For students, ScheduGenius offers a convenient way to manage their class schedules, helping them stay organized and on track with their academic commitments. Teachers can also benefit from ScheduGenius by using it to manage their teaching schedules, track class timings, and organize classroom activities effectively. By catering to both students and teachers, ScheduGenius aims to streamline the scheduling process and enhance productivity in educational environments.
 
 ## Code Style 
-The ScheduGenius terminal application was meticulously crafted using Python3, adhering to industry-standard conventions and guidelines such as the PEP 8 - Style Guide For Python Code by Guido van Rossum, Barry Warsaw, and Nick Coghlan. This includes maintaining a clean and organized code layout with four spaces of indentation, consistent use of tabs (though spaces are preferred), block comments for clarity, and whitespace management in expressions and statements.(1) 
+The ScheduGenius terminal application was meticulously crafted using Python3, adhering to industry-standard conventions and guidelines such as the PEP 8 - Style Guide For Python Code. This includes maintaining a clean and organized code layout with four spaces of indentation, consistent use of tabs (though spaces are preferred), block comments for clarity, and whitespace management in expressions and statements (Van Rossum, 2001). 
 
 A key focus was placed on using descriptive variable and function names, following the lowercase with underscores convention for readability and understanding. Docstrings were employed for all functions to provide comprehensive documentation within the codebase.
 
@@ -51,6 +51,9 @@ Error handling mechanisms are integrated into the feature to enhance user experi
 To adhere to the marking rubric's requirements for a well-organized implementation plan, I incorporated Trello as a pivotal tool in my development process. This integration allowed me to intricately monitor progress, categorize distinct features, and maintain a systematic task list. Each feature received a detailed breakdown of tasks, with deadlines strategically set approximately a week ahead of the actual due date. This proactive scheduling strategy provided a buffer for comprehensive testing, error handling, and addressing any unexpected hurdles encountered during development. Leveraging Trello's visual indicators, such as turning deadline boxes green upon task completion, fostered a sense of achievement and enhanced the overall project management efficiency.
 
 Here is a link to my trello: [Trello board](https://trello.com/b/pvjBsD7b/t1a3-terminal-application)  
+(Regrettably,I accidentally deleted my Trello board and had to start over again.)
+
+![Trello](./docs/trello.png) 
 
 Trello was essential in effectively organising the entire development process of my class schedule manager terminal application. Trello facilitated the whole software development process, from early planning to testing, development, and refining the codebase. It enabled agile modifications and enhancements throughout the process. An important lesson learned is the Trello board's ever-changing nature, as tasks were continuously added, updated, or completed. This flexibility and unintentional alignment with Agile approaches demonstrated the non-linear character of the development process.
 
@@ -225,3 +228,16 @@ colored==1.4.4
 ```
 
 ## References: 
+ASCII art: [Generator](https://pypi.org/project/art/) 
+
+flatfile.com. (n.d.). What is a CSV File? How to Open and Edit a CSV.https://flatfile.com/blog/what-is-a-csv-file-guide-to-uses-and-benefits/ 
+
+Stack Overflow (n.d.). Inserting Input into CSV. https://stackoverflow.com/questions/55980027/building-a-csv-based-on-user-input 
+
+Python Software Foundation (2002). Datetime — Basic Date and Time Types — Python 3.7.2 Documentation. Python.org. https://docs.python.org/3/library/datetime.html.
+
+Ask Different. (n.d.). macos - How do I run a .sh or .command file in Terminal. https://apple.stackexchange.com/questions/235128/how-do-i-run-a-sh-or-command-file-in-terminal.
+
+Van Rossum, G., Warsaw, B. and Coghlan, N. (2001). PEP 8 – Style Guide for Python Code. peps.python.org. https://peps.python.org/pep-0008/.
+
+
