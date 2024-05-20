@@ -180,7 +180,7 @@ cd /Users/username/Desktop
 
 2. Once inside the selected folder, clone the application repository from Github using the command: 
 ```shell 
-git clone https://github.com/jordansbenjamin/Blackjack_terminal-app.git
+git clone https://github.com/sooffia/T1A3_Terminal-Application 
 ```
 This command will clone the repository from the following window on [Github Repo](https://github.com/sooffia/T1A3_Terminal-Application/tree/main) 
 
@@ -191,7 +191,7 @@ cd T1A3_Terminal-Application/src
 
 4. Within the repository folder, type the following command and press Enter: 
 ```shell
-./run_application.sh
+./run_application.sh 
 ``` 
 This command will automatically execute the bash script contained in the folder, performing the following actions:
 - Checks if Python version 3 is installed and displays a warning message if not available.
